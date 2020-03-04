@@ -1,0 +1,30 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    candidate = [];
+    def DFS_searching(self, node: TreeNode) -> int:
+        
+        if node.left == None and node.right == None:
+            self.candidate.append(node.val);
+            return node.val;
+        left_branch = 0;
+        right_branch = 0;
+        if node.left != None:
+            left_branch = self.DFS_searching(node.left);
+        if node.right != None:
+            right_branch = self.DFS_searching(node.right);
+        long_branch = max([left_branch, right_branch, 0]) + node.val;
+        sub_max = max([left_branch,0]) + max([right_branch,0]) + node.val;
+        self.candidate.append(sub_max);
+        return long_branch;
+        
+    def maxPathSum(self, root: TreeNode) -> int:
+        self.DFS_searching(root);
+        temp = max(self.candidate);
+        self.candidate.clear();
+        return temp;
