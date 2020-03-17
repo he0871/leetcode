@@ -1,0 +1,30 @@
+class Solution:
+    def canFinish(self, numCourses, prerequisites) -> bool:
+        graph = [[] for i in range(numCourses)]#be depended on
+        InDegree = {};
+        remain = list(range(numCourses))
+        for item in remain:
+            InDegree[item] = 0;
+            
+        for relation in prerequisites:
+            nextCourse, prevCourse = relation[0], relation[1]
+            graph[prevCourse].append(nextCourse);
+            InDegree[nextCourse] = InDegree.get(nextCourse,0) + 1;
+        
+        
+        
+        queue = []
+        while(remain != []):
+            queue = [];
+            for item in remain:
+                if InDegree[item] == 0:
+                    #we can not change the size of list during iterate, so we store the point at this moment
+                    queue.append(item);
+                    for nextC in graph[item]:
+                        InDegree[nextC] -= 1;
+            if queue == []:
+                return False;
+            for item in queue:
+                remain.remove(item)
+            
+        return True;
