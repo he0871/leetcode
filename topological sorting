@@ -1,0 +1,32 @@
+from collections import Counter
+class Solution:
+    def canFinish(self, numCourses, prerequisites) -> bool:
+        rely_map = [];
+        rely_num = [];
+        i = 0;
+        while(i<numCourses):
+            rely_map.append([])
+            rely_num.append(0)
+            i += 1;
+        
+        for item in prerequisites:
+            rely_map[item[0]].append(item[1]);
+            rely_num[item[1]] += 1;
+        
+        k = 0;
+        while(True):
+            cnt = 0;
+            i = 0;
+            #print(rely_num)
+            #print(rely_map)
+            while(i < len(rely_num)):
+                if rely_num[i] == 0:
+                    cnt += 1;
+                    for line in rely_map[i]:
+                        rely_num[line] -= 1;
+                i += 1;
+                
+            if sum(rely_num) == 0:
+                return True;
+            if (0 == cnt):
+                return False;
