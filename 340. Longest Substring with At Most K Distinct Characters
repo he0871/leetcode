@@ -1,0 +1,38 @@
+class Solution:
+    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
+        #protection
+        if s == [] or k == 0:
+            return 0;
+        if len(s) < k:
+            return len(s)
+        left = 0;
+        right = 0;
+        max_length = 0;
+        distinct = {};
+        while (right < len(s)):
+            #move right pointer
+            while(len(distinct.keys()) <= k and right < len(s)):
+                if s[right] in distinct.keys():
+                    distinct[s[right]] += 1
+                else:
+                    distinct[s[right]] = 1
+                right += 1;
+            if max_length < (right-left-1):
+                max_length = (right-left-1);
+            #print(right)
+            #print(distinct)
+            #move left pointer
+            while(len(distinct.keys()) > k and left < right):
+                distinct[s[left]] -= 1;
+                if 0 == distinct[s[left]]:
+                    distinct.pop(s[left])
+                left += 1;                
+            if max_length < (right-left):
+                max_length = (right-left);
+        #print(distinct)/
+        if max_length < (right-left):
+                max_length = (right-left);
+        
+        
+        return max_length
+            
