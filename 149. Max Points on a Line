@@ -1,0 +1,64 @@
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        if 2 >= len(points):
+            return len(points)
+        #build map
+        travel_map = [[]] * len(points)
+        i = 0
+        while i < len(points) - 1:
+            sub_list = points[i + 1:]
+            travel_map[i] = sub_list
+            i += 1
+        #search
+        maxline = 2
+        k = 0
+        while k < len(points):
+            p1 = points[k]
+            p2set = travel_map[k]
+            if p2set == []:
+                k += 1
+                continue
+                
+            j = 0
+            while j < len(p2set):
+                p2 = p2set[j]
+                x = k + 2
+                coline = 2
+                
+                while x < len(points):
+                    px = points[x]
+                    if p2 == px:
+                        x += 1
+                        continue
+                    if self.isSameLine(p1, p2, px):
+                        coline += 1
+                        #remove px from p2's set
+                        try:
+                            if px in travel_map[j]:
+                                travel_map[j].remove(px)
+                            if px in travel_map[k]:
+                                travel_map[k].remove(px)
+                        except:
+                            print(travel_map[j])
+                            print(px)
+                    x += 1
+                maxline = max(maxline, coline)
+                #print(maxline)
+                
+                j += 1
+            k += 1
+        return maxline
+        
+                    
+                        
+                
+            
+        
+        
+    def isSameLine(self, p1, p2, px):
+        if (p1[0] - px[0]) * (p2[1] - px[1]) != (p2[0] - px[0]) * (p1[1] - px[1]):
+            return False
+        else:
+            #print('yes')
+            return True
+        
