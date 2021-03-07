@@ -1,0 +1,59 @@
+class Solution:
+        
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        if len(words) == 1:
+            r = words[0] + ' ' * (maxWidth - len(words))
+            return [r]
+            
+        rslt = []
+        i = 0
+        while i < len(words) and len(words) > 1:
+            cur_remain = maxWidth - len(words[i])
+            temp = [words[i]]
+            while (i+1) < len(words) and len(words[i+1]) < cur_remain:
+                cur_remain -= (len(words[i+1]) + 1)
+                temp.append(words.pop(i+1))
+            if (i+1) >= len(words):
+                rslt.append(self.fitline(temp, maxWidth, True))
+            else:
+                rslt.append(self.fitline(temp, maxWidth, False))
+            i += 1
+        print(rslt)
+        return rslt
+                
+                
+    def fitline(self, wl, maxWidth, is_lastline): 
+        if is_lastline:
+            #print(wl)
+            rslt = " ".join(wl)
+            pad = maxWidth - len(rslt)
+            rslt = rslt + ' ' * pad
+            return rslt
+        nwords = len(wl)
+        if 1 == nwords:
+            #print(wl)
+            rslt = wl[0] + ' ' * (maxWidth - len(wl[0]))
+            return rslt
+        total_length = 0
+        for item in wl:
+            total_length += len(item)
+        total_spaces = maxWidth - total_length
+        total_slots  = nwords - 1
+        slot_width = floor(total_spaces / total_slots)
+        left_pad = total_spaces % total_slots
+        slots = [slot_width] * total_slots
+        i  = 0
+        while i < left_pad:
+            slots[i] += 1
+            i += 1
+        
+        rslt = ""
+        j = 0
+        while j < len(wl) - 1:
+            rslt += wl[j]
+            rslt += ' ' * slots[j]
+            j += 1
+ 
+        rslt += wl[j]
+        
+        return rslt
