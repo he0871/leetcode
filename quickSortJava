@@ -1,0 +1,33 @@
+class Solution {
+    public int partition(int[] nums, int lo, int hi){
+        
+        int i = lo;
+        int j = hi;
+        int pivot = nums[hi];
+        while(i < j){
+            while(i < j && nums[i] < pivot){i++;}
+            while(i < j && nums[j] >= pivot){j--;}
+            if(i>=j){break;}
+            int tm = nums[i];
+            nums[i] = nums[j];
+            nums[j] = tm;
+        }
+        nums[hi] = nums[i];
+        nums[i] = pivot;
+        return(i);
+        
+    }
+    public int[] quickSort(int[] nums, int lo, int hi){
+        if (lo >=hi){
+            return nums;
+        }
+        int k = partition(nums, lo, hi);
+        quickSort(nums, lo, k-1);
+        quickSort(nums, k+1, hi);
+        return (nums);
+        
+    }
+    public int[] sortArray(int[] nums) {
+        return quickSort(nums, 0, nums.length-1);
+    }
+}
