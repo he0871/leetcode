@@ -1,0 +1,40 @@
+import java.util.Arrays; 
+class Solution {
+    private int[] mergeSort(int[] nums){
+        if (nums.length <= 1){
+            return (nums);
+        }
+        int mid = (nums.length / 2);
+        int[] left  = mergeSort(Arrays.copyOfRange(nums, 0, mid));
+        int[] right = mergeSort(Arrays.copyOfRange(nums, mid, nums.length));
+        int i = 0;
+        int j = 0;
+        while (i < left.length || j < right.length){
+            if (i >= left.length){
+                nums[i+j] = right[j];
+                j++;
+                continue;
+            }
+            else if (j >= right.length){
+                nums[i+j] = left[i];
+                i++;
+                continue;
+            } 
+            else if (left[i] < right[j]){
+                nums[i+j] = left[i];
+                i++;
+            }
+            else{
+                nums[i+j] = right[j];
+                j++;
+            }
+        }
+        return nums;
+        
+        
+            
+    }
+    public int[] sortArray(int[] nums) {
+        return mergeSort(nums);
+    }
+}
