@@ -1,0 +1,63 @@
+class Solution:
+    def blend(self, word):
+            rslt = []
+            wd = list(word)
+            for i in range(len(wd)):
+                xwd = copy.copy(wd)
+                xwd[i] = '*'
+                rslt.append("".join(xwd))
+            return rslt
+                
+    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        if endWord not in wordList:
+            return []
+        visited    = collections.defaultdict(list)
+        midMap = collections.defaultdict(list)
+        wordMap = collections.defaultdict(list)
+        shortestPath = []
+        #build mid map
+        for word in wordList:
+            avatar = self.blend(word)
+            for ava in avatar:
+                midMap[ava].append(word)
+        #build word map
+        for word in wordList:
+            hops = self.blend(word)
+            for item in hops:
+                wordMap[word] += midMap[item]
+                wordMap[word].remove(word)
+        if beginWord not in wordMap:
+            for item in self.blend(beginWord):
+                wordMap[beginWord] += midMap[item]
+
+        #BFS
+        visited[beginWord].append([beginWord])
+        if beginWord in wordList:
+            wordList.remove(beginWord)
+        queue = [beginWord]
+        is_end = False
+        while queue and not is_end:
+            cache = set()
+            for _ in range(len(queue)):
+                curWord = queue.pop()
+                neigs = wordMap[curWord]
+                #print(neigs)
+                for nw in neigs:
+                    if nw == endWord:
+                        is_end = True
+                    if nw in wordList:
+                        cache.add(nw)
+                        for path in visited[curWord]:
+                            visited[nw].append(path + [nw])
+                if curWord in visited:
+                    del visited[curWord]
+            for n in cache:
+                if n in wordList:
+                    wordList.remove(n)
+                queue.append(n)
+        #print(visited)
+        return visited[endWord]
+                
+                
+                        
+        
