@@ -1,0 +1,63 @@
+class Solution:
+    """
+    @param source: the input string
+    @return: the number of subsequences 
+    """
+    def countSubsequences(self, source):
+        # write your code here
+
+        def dp(idx, current):
+            if idx == len(source) - 1:
+                if current == 'c' and source[idx] == 'c':
+                    return 2
+                if current == 'b' and source[idx] == 'c':
+                    return 1
+                if current == 'c':
+                    return 1
+                else:
+                    return 0
+            #cnt = 0
+            if not current:
+                if source[idx] == 'a':
+                    cnt1 = dp(idx + 1, source[idx])#count this character in 
+                    cnt2 = dp(idx + 1, current)
+                    cnt = cnt1 + cnt2
+                    #print(cnt)
+                else:
+                    cnt = dp(idx + 1, current)
+            if current == 'a':
+                if source[idx] == 'a':
+                    cnt = 2 * dp(idx + 1, current)#in and not in
+                if source[idx] == 'b':
+                    cnt1 = dp(idx + 1, source[idx])#count this character in 
+                    cnt2 = dp(idx + 1, current)
+                    cnt = cnt1 + cnt2
+                if source[idx] == 'c':
+                    cnt = dp(idx + 1, current)
+            if current == 'b':
+                if source[idx] == 'b':
+                    cnt = 2 * dp(idx + 1, current)#no matter 
+                if source[idx] == 'c':
+                    cnt1 = dp(idx + 1, source[idx])#count this character in 
+                    cnt2 = dp(idx + 1, current)
+                    cnt = cnt1 + cnt2
+                if source[idx] == 'a':
+                    cnt = dp(idx + 1, current)
+                    
+                    
+            if current == 'c':
+                if source[idx] == 'c':
+                    cnt = 2 * dp(idx + 1, current)
+                if source[idx] == 'a':
+                    cnt = dp(idx + 1, current)
+                    
+                if source[idx] == 'b':
+                    cnt = dp(idx + 1, current)
+            #print(cnt)
+            return cnt
+        
+        idx = 0
+        while source[idx] != 'a':
+            idx += 1
+        cnt = dp(idx, None)
+        return cnt
