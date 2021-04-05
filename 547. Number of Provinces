@@ -1,0 +1,33 @@
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        provinces = [-1] * len(isConnected)
+        unionMap = collections.defaultdict(set)
+        currentUnion = 0
+        for i in range(len(isConnected)):
+            xlen = i + 1
+            for j in range(xlen):
+                if isConnected[i][j]:
+                    if provinces[i] + provinces[j] == -2:
+                        provinces[i], provinces[j] = currentUnion, currentUnion
+                        unionMap[currentUnion] = {i, j}
+                        currentUnion += 1
+                    elif provinces[i] == -1:
+                        provinces[i] = provinces[j]
+                        unionMap[provinces[j]].add(i)
+                    elif provinces[j] == -1:
+                        provinces[j] = provinces[i]
+                        unionMap[provinces[i]].add(j)
+                    else:
+                        #print(provinces[i], provinces[j])
+                        oldUnion = provinces[j]
+                        for city in unionMap[oldUnion]:
+                            provinces[city] = provinces[i]    
+                        #print(unionMap[provinces[i]])
+                        
+                        unionMap[provinces[i]].update(unionMap[oldUnion])
+                        #print(unionMap[provinces[i]])
+                        #del unionMap[oldUnion]
+                        
+        group = collections.Counter(provinces)
+        #print(provinces)
+        return len(group)
