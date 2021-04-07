@@ -1,0 +1,43 @@
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        rotQ = collections.deque()
+        freshQ = set()
+        cnt = 0
+        def rot(node):
+            if node in freshQ:
+                rotQ.append(node)
+                freshQ.remove(node)
+                
+        m = len(grid)
+        n = len(grid[0])
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 2:
+                    rotQ.append((i,j))
+                elif grid[i][j] == 1:
+                    freshQ.add((i,j))
+        print(rotQ)
+        while True:
+            #print(freshQ)
+            before = len(freshQ)
+            for _ in range(len(rotQ)):
+                node = rotQ.popleft()   
+                #rint(node)
+                y,x = node[0], node[1]
+                up = (y-1,x)
+                down = (y+1,x)
+                left = (y,x-1)
+                right = (y, x+1)
+                rot(up)
+                rot(down)
+                rot(left)
+                rot(right)
+            #print(rotQ)
+            if not rotQ and not freshQ:
+                break
+            
+            if not rotQ and freshQ:
+                cnt = -1
+                break
+            cnt += 1
+        return cnt
