@@ -1,0 +1,46 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+class Solution:
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        if not head:
+            return None
+        seen    = []
+        created = []
+        newHead = Node(head.val)
+        new = newHead
+        node = head
+        seen.append(node)
+        created.append(new)
+        def dfs(node, new):
+            #print(node.val, new.val)
+            if node.random:
+                if node.random not in seen:
+                    rd = Node(node.random.val)
+                    new.random = rd
+                    seen.append(node.random)
+                    created.append(rd)
+                else:
+                    new.random = created[seen.index(node.random)]
+            if node.next:
+                if node.next not in seen:
+                    nx = Node(node.next.val)
+                    new.next = nx
+                    seen.append(node.next)
+                    created.append(nx)
+                else:
+                    new.next = created[seen.index(node.next)]
+                node = node.next
+                new = new.next
+                dfs(node, new)
+        
+        dfs(node, new)
+            
+        return newHead
+        
