@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        if (1 >= nums.size()){return nums;}
+        int high = 0;
+        int low = nums[0];
+        for(int i = 0; i < nums.size(); i++){
+            high = max(high, nums[i]);
+            low = min(low, nums[i]);
+        }
+        int len = high - low;
+        int *buckets = new int[len+1];
+        memset(buckets, 0, (len+1)*sizeof(int));
+        /*for(int i = 0; i <= len; i++){
+            cout << ' ' << buckets[i];
+        }
+        cout << '\n';*/
+        int idx = -1;
+        for(int i = 0; i < nums.size(); i++){
+            idx = (int) (nums[i] - low);
+            //cout << " " << idx;
+            buckets[idx]++;
+        }
+        vector<int> ans(k);
+        //memset(ans,0,k);
+        
+        int *p = ans.data();
+        for(int i = 0; i < k; i++){
+            int boss = 0;
+            for(int j = 0; j <= len; j++){
+                if (buckets[j] > buckets[boss]){boss = j;}
+            }
+            buckets[boss] = -1;
+            *(p+i) = low + (boss);
+        }
+        //free(buckets); 
+        return ans;
+    }
+};
