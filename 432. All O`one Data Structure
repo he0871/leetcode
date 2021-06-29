@@ -1,0 +1,90 @@
+class AllOne {
+    HashMap<String, Integer> dict = new HashMap<String, Integer>();
+    String maxKey = "";
+    String minKey = "";
+    /** Initialize your data structure here. */
+    public AllOne() {
+        
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void inc(String key) {
+        if (dict.containsKey(key)){
+            dict.put(key, dict.get(key) + 1);
+        }
+        else{
+            dict.put(key, 1);
+        }
+        if (maxKey == "" || dict.get(maxKey) < dict.get(key)){
+            maxKey = key;
+        }
+        if (key.equals(minKey)){
+            minKey = findMinKey();
+            //System.out.println(minKey);
+        }
+        else if (minKey == "" || dict.get(minKey) > dict.get(key)){
+            minKey = key;
+        }
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void dec(String key) {
+        if (dict.containsKey(key)){
+            if (dict.get(key) == 1){
+                dict.remove(key);
+                minKey = findMinKey();
+                return;
+            }
+            dict.put(key, dict.get(key) - 1);
+            if (minKey == "" || dict.get(key) < dict.get(minKey)){
+                minKey = key;
+            }
+            if (key.equals(maxKey)){
+                maxKey = findMaxKey();
+            }
+            
+        }
+        
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    private String findMaxKey(){
+        if (dict.size() < 1){return "";}
+        Map.Entry<String, Integer> maxEntry = null;
+        for (Map.Entry<String, Integer> entry : dict.entrySet()){
+            if(maxEntry == null || maxEntry.getValue() < entry.getValue()){
+                maxEntry = entry;
+            }
+        }
+        return maxEntry.getKey();
+    }
+    
+    public String getMaxKey() {
+        return maxKey;
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    private String findMinKey(){
+        if (dict.size() < 1){return "";}
+        Map.Entry<String, Integer> minEntry = null;
+        for (Map.Entry<String, Integer> entry : dict.entrySet()){
+            if(minEntry == null || minEntry.getValue() > entry.getValue()){
+                minEntry = entry;
+            }
+        }
+        return minEntry.getKey();
+    }
+    
+    public String getMinKey() {
+        return minKey; 
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
